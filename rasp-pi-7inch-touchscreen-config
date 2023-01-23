@@ -1,0 +1,23 @@
+Two steps required to rotate the official raspberry pi 7" touchscreen by 90 degrees
+
+1.
+Add below to /boot/config.txt
+display_lcd_rotate=1
+
+Comment out below from /boot/config.txt:
+dtoverlay=vc4-kms-v3d
+
+2.
+Add below to /usr/share/X11/xorg.conf.d/10-evdev.conf and /usr/share/X11/xorg.conf.d/40-libinput.conf (or any files containing a "touchscreen" config):
+Option "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"
+
+e.g.
+
+
+Section "InputClass"
+        Identifier "libinput touchscreen catchall"
+        MatchIsTouchscreen "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+        Option "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"
+EndSection
